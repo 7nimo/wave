@@ -1,16 +1,15 @@
 <script>
   import { getContext } from "svelte";
   import * as THREE from "three";
-
   import { onMount } from "svelte";
 
   onMount(() => {
     const scene = getContext("scene");
+    console.log("scene: ", scene);
     draw(scene);
-    console.log(scene);
   });
 
-  function draw(scene) {
+  const draw = (scene) => {
     // note: set up plane mesh and add it to the scene
     const planeGeometry = new THREE.PlaneGeometry(64, 64, 64, 64);
     const planeMaterial = new THREE.MeshNormalMaterial({ wireframe: true });
@@ -31,5 +30,5 @@
     planeMesh.scale.z = 2;
     planeMesh.position.y = 8;
     scene.add(planeMesh);
-  }
+  };
 </script>

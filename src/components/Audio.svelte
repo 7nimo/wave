@@ -1,9 +1,14 @@
 <script>
-  let audioContext, audioElement, source;
+  import { onMount } from "svelte";
+
+  let audioContext, audioElement, analyser, source;
+
+  onMount(() => {
+    //setupAudioContext();
+  });
 
   function setupAudioContext() {
     audioContext = new window.AudioContext();
-    audioElement = document.getElementById("audio");
     source = audioContext.createMediaElementSource(audioElement);
     analyser = audioContext.createAnalyser();
     source.connect(analyser);
@@ -37,10 +42,17 @@
 </script>
 
 <div class="audio">
-  <audio src="./hold-on.flac" class="panel" controls autoPlay onPlay={play} />
+  <audio
+    src="./hold-on.flac"
+    class="panel"
+    controls
+    autoPlay
+    onPlay={play}
+    bind:this={audioElement}
+  />
 </div>
 
-<style>
+<style type="scss">
   .audio {
     position: absolute;
     width: 100vw;

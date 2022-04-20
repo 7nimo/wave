@@ -17,15 +17,13 @@
     height;
 
   onMount(() => {
-    const ctx = canvasElement.getContext("webgl2");
-    console.log(ctx);
     console.log(width);
     console.log(height);
     initScene();
-    animate();
+    // animate();
   });
 
-  function initScene() {
+  const initScene = () => {
     camera = new THREE.PerspectiveCamera(fov, width / height, 1, 1000);
     camera.position.z = 196;
 
@@ -38,10 +36,8 @@
       colorA: { type: "vec3", value: new THREE.Color(0xffffff) },
     };
 
-    const ctx = canvasElement.getContext("2d");
-
     renderer = new THREE.WebGLRenderer({
-      ctx,
+      canvasElement,
       antialias: true,
     });
 
@@ -63,26 +59,26 @@
     scene.add(spotLight);
 
     window.addEventListener("resize", () => onWindowResize(), false);
-    setContext("scene", scene);
-  }
+    // setContext("scene", scene);
+  };
 
-  function animate() {
+  const animate = () => {
     window.requestAnimationFrame(animate);
     render();
     stats.update();
     controls.update();
-  }
+  };
 
-  function render() {
+  const render = () => {
     uniforms.u_time.value += clock.getDelta();
     renderer.render(scene, camera);
-  }
+  };
 
-  function onWindowResize() {
+  const onWindowResize = () => {
     camera.aspect = self.innerWidth / self.innerHeightt;
     camera.updateProjectionMatrix();
     renderer.setSize(self.innerWidth, self.innerHeight);
-  }
+  };
 </script>
 
 <canvas
@@ -90,12 +86,10 @@
   bind:offsetWidth={width}
   bind:offsetHeight={height}
   bind:this={canvasElement}
->
-  <slot />
-</canvas>
+/>
 
 <style lang="scss">
-  #scene {
+  canvas {
     width: 100vw;
     height: 100vh;
   }

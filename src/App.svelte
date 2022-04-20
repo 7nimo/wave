@@ -6,12 +6,13 @@
 
 <main>
   <Audio />
+
   <Scene>
     <Mesh />
   </Scene>
 </main>
 
-<style>
+<style type="scss">
   main {
     height: 100%;
   }
