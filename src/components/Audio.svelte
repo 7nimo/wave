@@ -1,10 +1,10 @@
 <script>
   import { onMount } from "svelte";
 
-  let audioContext, audioElement, analyser, source;
+  let audioContext, audioElement, analyser, source, dataArray;
 
   onMount(() => {
-    //setupAudioContext();
+    setupAudioContext(audioElement);
   });
 
   function setupAudioContext() {
@@ -68,5 +68,6 @@
     bottom: 5%;
     left: 50%;
     transform: translateX(-50%);
+    z-index: 1000;
   }
 </style>

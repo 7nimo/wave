@@ -1,13 +1,17 @@
-<script>
+<script context="module">
   import * as THREE from "three";
+
+  export let scene = new THREE.Scene();
+</script>
+
+<script>
   import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
   import Stats from "three/examples/jsm/libs/stats.module";
-  import { onMount, setContext } from "svelte";
+  import { onMount } from "svelte";
 
-  let canvasElement,
+  let canvas,
     camera,
     clock,
-    scene,
     stats,
     uniforms,
     controls,
@@ -17,18 +21,15 @@
     height;
 
   onMount(() => {
-    console.log(width);
-    console.log(height);
-    initScene();
-    // animate();
+    init();
+    animate();
   });
 
-  const initScene = () => {
+  function init() {
     camera = new THREE.PerspectiveCamera(fov, width / height, 1, 1000);
     camera.position.z = 196;
 
     clock = new THREE.Clock();
-    scene = new THREE.Scene();
 
     uniforms = {
       u_time: { type: "f", value: 1.0 },
@@ -37,15 +38,10 @@
     };
 
     renderer = new THREE.WebGLRenderer({
-      canvasElement,
+      canvas,
       antialias: true,
     });
-
-    renderer.setSize(self.innerWidth, self.innerHeight);
-
-    controls = new OrbitControls(camera, renderer.domElement);
-    stats = Stats();
-    document.body.appendChild(stats.dom);
+    renderer.setSize(width, height);
 
     // ambient light which is for the whole scene
     let ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
@@ -59,38 +55,46 @@
     scene.add(spotLight);
 
     window.addEventListener("resize", () => onWindowResize(), false);
-    // setContext("scene", scene);
-  };
 
-  const animate = () => {
+    controls = new OrbitControls(camera, renderer.domElement);
+    stats = Stats();
+    document.body.appendChild(stats.dom);
+  }
+
+  function animate() {
     window.requestAnimationFrame(animate);
     render();
     stats.update();
     controls.update();
-  };
+  }
 
-  const render = () => {
+  function render() {
     uniforms.u_time.value += clock.getDelta();
     renderer.render(scene, camera);
-  };
+  }
 
-  const onWindowResize = () => {
-    camera.aspect = self.innerWidth / self.innerHeightt;
+  function onWindowResize() {
+    camera.aspect = width / height;
     camera.updateProjectionMatrix();
-    renderer.setSize(self.innerWidth, self.innerHeight);
-  };
+    renderer.setSize(width, height);
+  }
 </script>
 
 <canvas
   id="scene"
-  bind:offsetWidth={width}
-  bind:offsetHeight={height}
-  bind:this={canvasElement}
-/>
+  bind:this={canvas}
+  bind:clientWidth={width}
+  bind:clientHeight={height}
+>
+  <slot />
+</canvas>
 
 <style lang="scss">
   canvas {
-    width: 100vw;
-    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
   }
 </style>
