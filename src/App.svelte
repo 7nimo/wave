@@ -8,7 +8,7 @@
   <Audio />
 
   <Scene>
-    <Mesh />
+    <!-- <Mesh /> -->
   </Scene>
 </main>
 
